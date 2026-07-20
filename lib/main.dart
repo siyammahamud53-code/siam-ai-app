@@ -17,7 +17,7 @@ class AuraXApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF060913), // Deep Cosmos Background
+        scaffoldBackgroundColor: const Color(0xFF070709), // Deep Obsidian Black
       ),
       home: const HomeScreen(),
     );
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   final List<Map<String, String>> _messages = [
     {
       'sender': 'ai',
-      'text': 'স্বাগতম সিয়াম দোস্ত! AURA-X সিস্টেম অ্যাক্টিভ। আজকের নির্দেশ বলো?'
+      'text': 'স্বাগতম সিয়াম দোস্ত! AURA-X গোল্ডেন কোর অ্যাক্টিভ। আজকের কী আদেশ?'
     }
   ];
   bool _isLoading = false;
@@ -112,17 +112,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           style: GoogleFonts.cinzel(
             fontWeight: FontWeight.bold,
             letterSpacing: 4.0,
-            color: const Color(0xFF00F2FE),
+            color: const Color(0xFFFFD700), // Royal Gold
             fontSize: 22,
           ),
         ),
-        backgroundColor: Colors.black.withAlpha(50),
+        backgroundColor: Colors.black.withAlpha(80),
         elevation: 0,
         centerTitle: true,
       ),
       body: Stack(
         children: [
-          // Dynamic Glowing Energy Aura Background
+          // Glowing Gold & Amber Energy Aura Background
           AnimatedBuilder(
             animation: _auraController,
             builder: (context, child) {
@@ -132,15 +132,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     top: -80 + (_auraController.value * 20),
                     left: -80 + (_auraController.value * 20),
                     child: Container(
-                      width: 300,
-                      height: 300,
+                      width: 320,
+                      height: 320,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: const Color(0xFF00F2FE).withAlpha((60 + (_auraController.value * 40)).toInt()),
+                        color: const Color(0xFFFFD700).withAlpha((50 + (_auraController.value * 35)).toInt()),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF00F2FE).withAlpha(100),
-                            blurRadius: 150,
+                            color: const Color(0xFFFFB700).withAlpha(100),
+                            blurRadius: 160,
                             spreadRadius: 40,
                           )
                         ],
@@ -151,15 +151,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     bottom: 40 - (_auraController.value * 20),
                     right: -80,
                     child: Container(
-                      width: 320,
-                      height: 320,
+                      width: 330,
+                      height: 330,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: const Color(0xFF4FACFE).withAlpha((50 + (_auraController.value * 30)).toInt()),
+                        color: const Color(0xFFFF8C00).withAlpha((40 + (_auraController.value * 30)).toInt()),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF00C6FF).withAlpha(90),
-                            blurRadius: 160,
+                            color: const Color(0xFFFFA500).withAlpha(90),
+                            blurRadius: 170,
                             spreadRadius: 50,
                           )
                         ],
@@ -175,31 +175,31 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           SafeArea(
             child: Column(
               children: [
-                // Anime Character Soul Core Display
+                // Soul Core Display - Black & Gold
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: Container(
-                    height: 130,
+                    height: 120,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Colors.white.withAlpha(25),
-                          Colors.white.withAlpha(5),
+                          const Color(0xFFFFD700).withAlpha(30),
+                          Colors.black.withAlpha(180),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: const Color(0xFF00F2FE).withAlpha(90),
+                        color: const Color(0xFFFFD700).withAlpha(120),
                         width: 1.2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF00F2FE).withAlpha(30),
+                          color: const Color(0xFFFFD700).withAlpha(25),
                           blurRadius: 20,
-                          spreadRadius: -5,
+                          spreadRadius: -2,
                         )
                       ],
                     ),
@@ -211,13 +211,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: const Color(0xFF00F2FE).withAlpha(30),
-                              border: Border.all(color: const Color(0xFF00F2FE)),
+                              color: const Color(0xFFFFD700).withAlpha(30),
+                              border: Border.all(color: const Color(0xFFFFD700)),
                             ),
                             child: const Icon(
                               Icons.auto_awesome_rounded,
-                              size: 40,
-                              color: Color(0xFF00F2FE),
+                              size: 38,
+                              color: Color(0xFFFFD700),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -228,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               Text(
                                 'AURA-X SOUL CORE',
                                 style: GoogleFonts.orbitron(
-                                  color: Colors.white,
+                                  color: const Color(0xFFFFD700),
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.5,
@@ -236,9 +236,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Aura Level: Max | Engine Ready',
+                                'Aura Level: Divine Gold | Ready',
                                 style: GoogleFonts.outfit(
-                                  color: const Color(0xFF00F2FE),
+                                  color: Colors.white70,
                                   fontSize: 12,
                                 ),
                               ),
@@ -268,8 +268,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           ),
                           decoration: BoxDecoration(
                             color: isUser
-                                ? const Color(0xFF00F2FE).withAlpha(40)
-                                : Colors.black.withAlpha(120),
+                                ? const Color(0xFFFFD700).withAlpha(45)
+                                : Colors.black.withAlpha(160),
                             borderRadius: BorderRadius.only(
                               topLeft: const Radius.circular(20),
                               topRight: const Radius.circular(20),
@@ -278,8 +278,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             ),
                             border: Border.all(
                               color: isUser
-                                  ? const Color(0xFF00F2FE)
-                                  : Colors.white.withAlpha(40),
+                                  ? const Color(0xFFFFD700)
+                                  : const Color(0xFFFFD700).withAlpha(40),
                               width: 1,
                             ),
                           ),
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       width: 24,
                       height: 24,
                       child: CircularProgressIndicator(
-                        color: Color(0xFF00F2FE),
+                        color: Color(0xFFFFD700),
                         strokeWidth: 2,
                       ),
                     ),
@@ -318,17 +318,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(100),
+                            color: Colors.black.withAlpha(150),
                             borderRadius: BorderRadius.circular(30),
                             border: Border.all(
-                              color: const Color(0xFF00F2FE).withAlpha(80),
+                              color: const Color(0xFFFFD700).withAlpha(90),
                             ),
                           ),
                           child: TextField(
                             controller: _messageController,
                             style: GoogleFonts.outfit(color: Colors.white),
                             decoration: InputDecoration(
-                              hintText: 'AURA-X কে কিছু জিজ্ঞেস করো...',
+                              hintText: 'AURA-X কে বার্তা পাঠাও...',
                               hintStyle: GoogleFonts.outfit(color: Colors.white38),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
@@ -344,12 +344,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: const LinearGradient(
-                            colors: [Color(0xFF00F2FE), Color(0xFF4FACFE)],
+                            colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF00F2FE).withAlpha(100),
-                              blurRadius: 10,
+                              color: const Color(0xFFFFD700).withAlpha(100),
+                              blurRadius: 12,
                               spreadRadius: 1,
                             )
                           ],
