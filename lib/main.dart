@@ -1,98 +1,92 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(const PremiumChatApp());
+  runApp(const SiamAiApp());
 }
 
-class PremiumChatApp extends StatelessWidget {
-  const PremiumChatApp({super.key});
+class SiamAiApp extends StatelessWidget {
+  const SiamAiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Siam AI Assistant',
       debugShowCheckedModeBanner: false,
-      title: 'Aura AI Companion',
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0D0E15),
-        textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0F0C20),
+        primarySwatch: Colors.deepPurple,
       ),
-      home: const ChatScreen(),
+      home: const HomeScreen(),
     );
   }
 }
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController _controller = TextEditingController();
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _messageController = TextEditingController();
   final List<Map<String, String>> _messages = [
-    {'sender': 'ai', 'text': 'Hey Siam! I am connected and ready. How can I help you today?'}
+    {
+      'sender': 'ai',
+      'text': 'হ্যালো সিয়াম দোস্ত! আমি তোর AI অ্যাসিস্ট্যান্ট। কীভাবে সাহায্য করতে পারি?'
+    }
   ];
-  String currentPersona = 'Male Companion';
 
   void _sendMessage() {
-    if (_controller.text.trim().isEmpty) return;
+    if (_messageController.text.trim().isEmpty) return;
+
     setState(() {
-      _messages.add({'sender': 'user', 'text': _controller.text.trim()});
+      _messages.add({
+        'sender': 'user',
+        'text': _messageController.text,
+      });
+      _messages.add({
+        'sender': 'ai',
+        'text': 'তোর বার্তা পেয়েছি! লাইভ ব্যাকএন্ড রেডি হলে আমি এক সেকেন্ডে রিপ্লাই দেব।',
+      });
     });
-    _controller.clear();
-    
-    Future.delayed(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          _messages.add({'sender': 'ai', 'text': 'I hear you loud and clear!'});
-        });
-      }
-    });
+
+    _messageController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        title: Text(
+          'Siam AI Assistant',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
-          'Aura AI Studio',
-          style: GoogleFonts.orbitron(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.cyanAccent,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.swap_horiz, color: Colors.cyanAccent),
-            onPressed: () {
-              setState(() {
-                currentPersona = (currentPersona == 'Male Companion') 
-                    ? 'Female Companion' 
-                    : 'Male Companion';
-              });
-            },
-          )
-        ],
+        centerTitle: true,
       ),
       body: Stack(
         children: [
+          // Background Glowing Orbs
           Positioned(
             top: -50,
             left: -50,
             child: Container(
-              width: 250,
-              height: 250,
+              width: 200,
+              height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.purpleAccent.withOpacity(0.3),
-                blurRadius: 100,
+                color: Colors.purple.withAlpha(100),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.purple.withAlpha(150),
+                    blurRadius: 100,
+                    spreadRadius: 20,
+                  )
+                ],
               ),
             ),
           ),
@@ -100,169 +94,125 @@ class _ChatScreenState extends State<ChatScreen> {
             bottom: 100,
             right: -50,
             child: Container(
-              width: 250,
-              height: 250,
+              width: 200,
+              height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.cyanAccent.withOpacity(0.2),
-                blurRadius: 100,
+                color: Colors.blue.withAlpha(100),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withAlpha(150),
+                    blurRadius: 100,
+                    spreadRadius: 20,
+                  )
+                ],
               ),
             ),
           ),
+          // Main UI
           Column(
             children: [
-              const SizedBox(height: 90),
-              Expanded(
-                flex: 4,
-                child: Center(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.1),
-                          blurRadius: 20,
-                          spreadRadius: 2,
-                        )
-                      ],
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.face, size: 80, color: Colors.cyanAccent),
-                          const SizedBox(height: 10),
-                          Text(
-                            '$currentPersona (3D Live)',
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
-                              fontWeight: FontWeight.w600,
-                            ),
+              // Character Avatar Section
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withAlpha(20),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white24),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.smart_toy_rounded,
+                          size: 60,
+                          color: Colors.purpleAccent,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '3D AI Character Active',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white70,
+                            fontSize: 14,
                           ),
-                          const Text(
-                            'Rive State Machine Ready',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
+              // Chat List
               Expanded(
-                flex: 5,
                 child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: _messages.length,
                   itemBuilder: (context, index) {
                     final msg = _messages[index];
                     final isUser = msg['sender'] == 'user';
                     return Align(
-                      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                      child: GlassBubble(text: msg['text']!, isUser: isUser),
+                      alignment:
+                          isUser ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: isUser
+                              ? Colors.purpleAccent.withAlpha(180)
+                              : Colors.white.withAlpha(30),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          msg['text'] ?? '',
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
+                      ),
                     );
                   },
                 ),
               ),
+              // Input Box
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
                     Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(25),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: TextField(
-                            controller: _controller,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              hintText: 'Type a message...',
-                              hintStyle: const TextStyle(color: Colors.grey),
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.08),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                borderSide: const BorderSide(color: Colors.cyanAccent),
-                              ),
-                            ),
+                      child: TextField(
+                        controller: _messageController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: 'এখানে কিছু লেখ দোস্ত...',
+                          hintStyle: const TextStyle(color: Colors.white38),
+                          filled: true,
+                          fillColor: Colors.white.withAlpha(20),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 10),
-                    FloatingActionButton(
-                      onPressed: _sendMessage,
-                      backgroundColor: Colors.cyanAccent,
-                      elevation: 5,
-                      child: const Icon(Icons.send, color: Colors.black),
-                    )
+                    CircleAvatar(
+                      backgroundColor: Colors.purpleAccent,
+                      radius: 25,
+                      child: IconButton(
+                        icon: const Icon(Icons.send, color: Colors.white),
+                        onPressed: _sendMessage,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class GlassBubble extends StatelessWidget {
-  final String text;
-  final bool isUser;
-
-  const GlassBubble({super.key, required this.text, required this.isUser});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isUser 
-                  ? Colors.purpleAccent.withOpacity(0.25)
-                  : Colors.cyanAccent.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isUser 
-                    ? Colors.purpleAccent.withOpacity(0.5)
-                    : Colors.cyanAccent.withOpacity(0.4),
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: isUser 
-                      ? Colors.purpleAccent.withOpacity(0.2)
-                      : Colors.cyanAccent.withOpacity(0.1),
-                  blurRadius: 12,
-                  spreadRadius: 1,
-                ),
-              ],
-            ),
-            child: Text(
-              text,
-              style: const TextStyle(color: Colors.white, fontSize: 15),
-            ),
-          ),
-        ),
       ),
     );
   }
