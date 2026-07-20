@@ -10,7 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
   rive: ^0.13.0
-  spline_flutter: ^0.0.1
   google_fonts: ^6.1.0
   cupertino_icons: ^1.0.6
 
