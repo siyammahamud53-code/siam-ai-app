@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           const SizedBox(width: 16),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'AURA-X SOUL CORE',
