@@ -26,7 +26,7 @@ jobs:
           channel: 'stable'
 
       - name: Re-create Android files
-        run: flutter create --project-name siam_ai_app . --platforms=android
+        run: flutter create --org com.aurax --project-name aura_x .
 
       - name: Get dependencies
         run: flutter pub get
@@ -37,5 +37,5 @@ jobs:
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
         with:
-      - name: Re-create Android files
-        run: flutter create --org com.aurax --project-name aura_x .
+          name: aura-x-app-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
