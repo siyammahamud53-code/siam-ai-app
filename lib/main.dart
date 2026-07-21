@@ -15,7 +15,7 @@ class SynapseApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SYNAPSE AI',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0D0E15),
+        scaffoldBackgroundColor: const Color(0xFF0A0B10), // Deep Cyber Dark
       ),
       home: const HomeScreen(),
     );
@@ -30,10 +30,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // ব্যাকএন্ড ইউআরএল
   final String baseUrl = "https://siyammahamud53-code.onrender.com";
 
-  // ক্যারেক্টার স্টেট ('ragna' অথবা 'maya')
   String currentPersona = "ragna"; 
   bool isGamingMode = false;
   bool isLoading = false;
@@ -41,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, String>> _messages = [];
 
-  // ক্যারেক্টার চেঞ্জ ফাংশন
+  // ক্যারেক্টার সুইচিং
   Future<void> switchPersona(String personaName) async {
     setState(() => isLoading = true);
     try {
@@ -55,21 +53,15 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           currentPersona = personaName;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(personaName == 'ragna' ? '⚡ রাগনা একটিভ হয়েছে!' : '🌸 মায়া একটিভ হয়েছে!'),
-            backgroundColor: personaName == 'ragna' ? Colors.cyan : Colors.pinkAccent,
-          ),
-        );
       }
     } catch (e) {
-      print("Error switching persona: $e");
+      print("Error: $e");
     } finally {
       setState(() => isLoading = false);
     }
   }
 
-  // মেসেজ পাঠানোর ফাংশন
+  // মেসেজ পাঠানো
   Future<void> sendMessage() async {
     if (_controller.text.trim().isEmpty) return;
 
@@ -107,91 +99,108 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // রাগনার জন্য সাইয়ান (Cyan) এবং মায়ার জন্য পিঙ্ক (Pink) কালার থিম
-    final themeColor = currentPersona == 'ragna' ? const Color(0xFF00E5FF) : const Color(0xFFFF4081);
+    // রাগনার জন্য সাইয়ান নেওন, মায়ার জন্য পিঙ্ক নেওন
+    final Color primaryGlow = currentPersona == 'ragna' 
+        ? const Color(0xFF00E5FF) 
+        : const Color(0xFFFF007F);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF161823),
+        backgroundColor: const Color(0xFF121420),
         elevation: 0,
         title: Row(
           children: [
-            Icon(Icons.auto_awesome, color: themeColor),
-            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: primaryGlow.withOpacity(0.2),
+                border: Border.all(color: primaryGlow, width: 1.5),
+              ),
+              child: Icon(Icons.bolt, color: primaryGlow, size: 20),
+            ),
+            const SizedBox(width: 10),
             Text(
               'SYNAPSE AI',
-              style: TextStyle(fontWeight: FontWeight.bold, color: themeColor, letterSpacing: 1.2),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                letterSpacing: 2,
+                shadows: [Shadow(color: primaryGlow, blurRadius: 10)],
+              ),
             ),
           ],
         ),
         actions: [
-          // গেম মোড বাটন
           IconButton(
             icon: Icon(
               isGamingMode ? Icons.sports_esports : Icons.sports_esports_outlined,
-              color: isGamingMode ? Colors.amber : Colors.grey,
+              color: isGamingMode ? primaryGlow : Colors.grey,
             ),
             onPressed: () {
-              setState(() {
-                isGamingMode = !isGamingMode;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(isGamingMode ? '🎮 গেম মোড চালু!' : '⚙️ নরমাল মোড চালু!')),
-              );
+              setState(() => isGamingMode = !isGamingMode);
             },
           ),
         ],
       ),
       body: Column(
         children: [
-          // ===== ১. ডুয়েল অবতার সুইচার হেডার =====
+          // ===== ১. ক্যারেক্টার সুইচার ট্যাবস =====
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            color: const Color(0xFF10121D),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            color: const Color(0xFF0D0E15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // রাগনা বাটন
+                // RAGNA TAB
                 GestureDetector(
                   onTap: () => switchPersona('ragna'),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                      color: currentPersona == 'ragna' ? const Color(0xFF00E5FF).withOpacity(0.2) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(20),
+                      color: currentPersona == 'ragna' ? const Color(0xFF00E5FF).withOpacity(0.15) : const Color(0xFF161823),
+                      borderRadius: BorderRadius.circular(25),
                       border: Border.all(
-                        color: currentPersona == 'ragna' ? const Color(0xFF00E5FF) : Colors.grey.shade800,
+                        color: currentPersona == 'ragna' ? const Color(0xFF00E5FF) : Colors.transparent,
+                        width: 1.5,
                       ),
+                      boxShadow: currentPersona == 'ragna' 
+                          ? [BoxShadow(color: const Color(0xFF00E5FF).withOpacity(0.3), blurRadius: 10)]
+                          : [],
                     ),
                     child: const Row(
                       children: [
-                        Icon(Icons.face, color: Color(0xFF00E5FF)),
-                        SizedBox(width: 6),
-                        Text('রাগনা (Ragna)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Icon(Icons.shield_outlined, color: Color(0xFF00E5FF), size: 18),
+                        SizedBox(width: 8),
+                        Text('RAGNA (Male)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
                 ),
 
-                // মায়া বাটন
+                // MAYA TAB
                 GestureDetector(
                   onTap: () => switchPersona('maya'),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                      color: currentPersona == 'maya' ? const Color(0xFFFF4081).withOpacity(0.2) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(20),
+                      color: currentPersona == 'maya' ? const Color(0xFFFF007F).withOpacity(0.15) : const Color(0xFF161823),
+                      borderRadius: BorderRadius.circular(25),
                       border: Border.all(
-                        color: currentPersona == 'maya' ? const Color(0xFFFF4081) : Colors.grey.shade800,
+                        color: currentPersona == 'maya' ? const Color(0xFFFF007F) : Colors.transparent,
+                        width: 1.5,
                       ),
+                      boxShadow: currentPersona == 'maya' 
+                          ? [BoxShadow(color: const Color(0xFFFF007F).withOpacity(0.3), blurRadius: 10)]
+                          : [],
                     ),
                     child: const Row(
                       children: [
-                        Icon(Icons.face_3, color: Color(0xFFFF4081)),
-                        SizedBox(width: 6),
-                        Text('মায়া (Maya)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Icon(Icons.auto_awesome, color: Color(0xFFFF007F), size: 18),
+                        SizedBox(width: 8),
+                        Text('MAYA (Female)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -207,24 +216,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // গ্লোয়িং অবতার রিং
                         Container(
-                          padding: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(25),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
+                            color: const Color(0xFF121420),
+                            border: Border.all(color: primaryGlow, width: 2),
                             boxShadow: [
-                              BoxShadow(color: themeColor.withOpacity(0.3), blurRadius: 30, spreadRadius: 5),
+                              BoxShadow(color: primaryGlow.withOpacity(0.4), blurRadius: 30, spreadRadius: 2),
                             ],
                           ),
                           child: Icon(
-                            currentPersona == 'ragna' ? Icons.smart_toy : Icons.face_3_rounded,
+                            currentPersona == 'ragna' ? Icons.psychology : Icons.face_3,
                             size: 70,
-                            color: themeColor,
+                            color: primaryGlow,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 20),
                         Text(
-                          currentPersona == 'ragna' ? 'রাগনা অনলাইন! কীভাবে সাহায্য করব দোস্ত?' : 'মায়া শুনছে... কিছু বলবে?',
-                          style: TextStyle(color: themeColor, fontSize: 16, fontWeight: FontWeight.bold),
+                          currentPersona == 'ragna' ? '⚡ RAGNA ONLINE' : '🌸 MAYA ONLINE',
+                          style: TextStyle(
+                            color: primaryGlow,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          currentPersona == 'ragna' ? 'কী খবর সিয়াম দোস্ত? বল কী সাহায্য লাগবে!' : 'শুনছি সিয়াম, মিষ্টি কিছু বলবে নাকি?',
+                          style: TextStyle(color: Colors.grey.shade400, fontSize: 13),
                         ),
                       ],
                     ),
@@ -239,11 +261,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(12),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(
-                            color: isUser ? themeColor.withOpacity(0.2) : const Color(0xFF161823),
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(color: isUser ? themeColor : Colors.grey.shade800),
+                            color: isUser ? primaryGlow.withOpacity(0.15) : const Color(0xFF121420),
+                            borderRadius: BorderRadius.only(
+                              topLeft: const Radius.circular(16),
+                              topRight: const Radius.circular(16),
+                              bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
+                              bottomRight: isUser ? Radius.zero : const Radius.circular(16),
+                            ),
+                            border: Border.all(
+                              color: isUser ? primaryGlow : Colors.white10,
+                            ),
                           ),
                           child: Text(
                             msg['text'] ?? '',
@@ -256,28 +285,43 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           if (isLoading)
-            LinearProgressIndicator(color: themeColor, backgroundColor: Colors.transparent),
+            LinearProgressIndicator(color: primaryGlow, backgroundColor: Colors.transparent),
 
-          // ===== ৩. ইনপুট বার =====
+          // ===== ৩. ফিউচারিস্টিক ইনপুট ফিল্ড =====
           Container(
             padding: const EdgeInsets.all(12),
-            color: const Color(0xFF161823),
+            decoration: const BoxDecoration(
+              color: Color(0xFF121420),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: currentPersona == 'ragna' ? 'কথা বল রাগনার সাথে...' : 'কথা বল মায়ার সাথে...',
-                      hintStyle: TextStyle(color: Colors.grey.shade600),
-                      border: InputBorder.none,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0A0B10),
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: primaryGlow.withOpacity(0.3)),
+                    ),
+                    child: TextField(
+                      controller: _controller,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: currentPersona == 'ragna' ? 'রাগনাকে কমান্ড দে...' : 'মায়াকে কিছু বল...',
+                        hintStyle: TextStyle(color: Colors.grey.shade600),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.send_rounded, color: themeColor),
-                  onPressed: sendMessage,
+                const SizedBox(width: 8),
+                CircleAvatar(
+                  backgroundColor: primaryGlow,
+                  child: IconButton(
+                    icon: const Icon(Icons.send_rounded, color: Colors.black, size: 20),
+                    onPressed: sendMessage,
+                  ),
                 ),
               ],
             ),
