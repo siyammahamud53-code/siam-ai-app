@@ -1,9 +1,16 @@
+name: siam_ai_app
+description: "SYNAPSE AI - Dual Persona Assistant"
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
 dependencies:
   flutter:
     sdk: flutter
   http: ^1.2.0
   web_socket_channel: ^3.0.0
-  flutter_overlay_window: ^0.4.5  # ফ্লোটিং অবতারের জন্য
+  flutter_overlay_window: ^0.4.5
 
 flutter:
   uses-material-design: true
