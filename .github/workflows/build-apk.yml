@@ -31,13 +31,12 @@ jobs:
       - name: Install Pillow for Logo
         run: pip3 install Pillow
 
-      - name: Generate AURA-X App Logo
+      - name: Generate AURA-X Triangle-X Logo
         run: |
           python3 -c "
           import os
           from PIL import Image, ImageDraw
           
-          # Ensure directories exist
           paths = [
             'android/app/src/main/res/mipmap-mdpi',
             'android/app/src/main/res/mipmap-hdpi',
@@ -50,12 +49,25 @@ jobs:
           
           sizes = [(48, 'mipmap-mdpi'), (72, 'mipmap-hdpi'), (96, 'mipmap-xhdpi'), (144, 'mipmap-xxhdpi'), (192, 'mipmap-xxxhdpi')]
           for size, folder in sizes:
-            img = Image.new('RGB', (size, size), color='#07090E')
+            img = Image.new('RGB', (size, size), color='#090407')
             draw = ImageDraw.Draw(img)
-            m = size // 10
-            draw.ellipse([m, m, size-m, size-m], outline='#BD00FF', width=max(2, size//20))
-            c = size // 4
-            draw.ellipse([c, c, size-c, size-c], fill='#00F0FF')
+            
+            # Draw Geometric Cyber Triangles (X-Core)
+            p1 = (size // 2, size // 8)
+            p2 = (size // 8, size - size // 4)
+            p3 = (size - size // 8, size - size // 4)
+            draw.polygon([p1, p2, p3], outline='#FFFFFF', width=max(2, size//25))
+            
+            p4 = (size // 2, size - size // 8)
+            p5 = (size // 8, size // 4)
+            p6 = (size - size // 8, size // 4)
+            draw.polygon([p4, p5, p6], outline='#E60039', width=max(2, size//25))
+            
+            # Central Core Node
+            c = size // 2
+            r = size // 10
+            draw.ellipse([c-r, c-r, c+r, c+r], fill='#FF0055')
+            
             img.save(f'android/app/src/main/res/{folder}/ic_launcher.png')
           "
 
