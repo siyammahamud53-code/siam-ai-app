@@ -1,332 +1,270 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 void main() {
-  runApp(const SynapseApp());
+  runApp(const SiamAiApp());
 }
 
-class SynapseApp extends StatelessWidget {
-  const SynapseApp({super.key});
+class SiamAiApp extends StatelessWidget {
+  const SiamAiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'SYNAPSE AI',
+      title: 'Siam AI Voice Assistant',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A0B10), // Deep Cyber Dark
+        scaffoldBackgroundColor: const Color(0xFF0D0F12), // Cyberpunk Dark
       ),
-      home: const HomeScreen(),
+      home: const CyberDashboardPage(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class CyberDashboardPage extends StatefulWidget {
+  const CyberDashboardPage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CyberDashboardPage> createState() => _CyberDashboardPageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final String baseUrl = "https://siyammahamud53-code.onrender.com";
+class _CyberDashboardPageState extends State<CyberDashboardPage>
+    with SingleTickerProviderStateMixin {
+  // ক্যারেক্টার স্টেট (Ragna / Maya)
+  bool isRagna = true;
+  bool isListening = false;
+  
+  // অ্যানিমেশন কন্ট্রোলার (Glowing Avatar Pulse)
+  late AnimationController _pulseController;
+  
+  // ক্যারেক্টার তথ্য
+  String get activeName => isRagna ? 'RAGNA' : 'MAYA';
+  String get activeAvatarPath =>
+      isRagna ? 'assets/icons/ragna_avatar.png' : 'assets/icons/maya_avatar.png';
+  Color get activeThemeColor =>
+      isRagna ? const Color(0xFF00E5FF) : const Color(0xFFFF2A85); // Neon Cyan / Neon Pink
 
-  String currentPersona = "ragna"; 
-  bool isGamingMode = false;
-  bool isLoading = false;
+  // সাইবার লগ স্ট্রিম
+  final List<String> _logs = [
+    "[SYSTEM]: Initializing Siam AI Core...",
+    "[NETWORK]: Render Backend Sync: OK",
+    "[AUDIO]: High-Fidelity Waveform Ready.",
+  ];
 
-  final TextEditingController _controller = TextEditingController();
-  final List<Map<String, String>> _messages = [];
-
-  // ক্যারেক্টার সুইচিং
-  Future<void> switchPersona(String personaName) async {
-    setState(() => isLoading = true);
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/switch'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'persona': personaName}),
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          currentPersona = personaName;
-        });
-      }
-    } catch (e) {
-      print("Error: $e");
-    } finally {
-      setState(() => isLoading = false);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
   }
 
-  // মেসেজ পাঠানো
-  Future<void> sendMessage() async {
-    if (_controller.text.trim().isEmpty) return;
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
 
-    final userMessage = _controller.text;
+  void _toggleAvatar() {
     setState(() {
-      _messages.add({"sender": "user", "text": userMessage});
-      isLoading = true;
+      isRagna = !isRagna;
+      _logs.insert(0, "[USER]: Switched Partner Persona to $activeName");
     });
-    _controller.clear();
+  }
 
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/chat'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'message': userMessage,
-          'user_id': 'siam_user',
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(utf8.decode(response.bodyBytes));
-        setState(() {
-          _messages.add({"sender": "ai", "text": data['reply']});
-        });
+  void _toggleListening() {
+    setState(() {
+      isListening = !isListening;
+      if (isListening) {
+        _logs.insert(0, "[$activeName]: Listening to Siam...");
+      } else {
+        _logs.insert(0, "[SYSTEM]: Audio Processing Complete.");
       }
-    } catch (e) {
-      setState(() {
-        _messages.add({"sender": "ai", "text": "⚠️ ব্যাকএন্ডের সাথে সংযোগ পাওয়া যাচ্ছে না দোস্ত!"});
-      });
-    } finally {
-      setState(() => isLoading = false);
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // রাগনার জন্য সাইয়ান নেওন, মায়ার জন্য পিঙ্ক নেওন
-    final Color primaryGlow = currentPersona == 'ragna' 
-        ? const Color(0xFF00E5FF) 
-        : const Color(0xFFFF007F);
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF121420),
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: primaryGlow.withOpacity(0.2),
-                border: Border.all(color: primaryGlow, width: 1.5),
-              ),
-              child: Icon(Icons.bolt, color: primaryGlow, size: 20),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              'SYNAPSE AI',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                letterSpacing: 2,
-                shadows: [Shadow(color: primaryGlow, blurRadius: 10)],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              isGamingMode ? Icons.sports_esports : Icons.sports_esports_outlined,
-              color: isGamingMode ? primaryGlow : Colors.grey,
-            ),
-            onPressed: () {
-              setState(() => isGamingMode = !isGamingMode);
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // ===== ১. ক্যারেক্টার সুইচার ট্যাবস =====
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            color: const Color(0xFF0D0E15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // RAGNA TAB
-                GestureDetector(
-                  onTap: () => switchPersona('ragna'),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: currentPersona == 'ragna' ? const Color(0xFF00E5FF).withOpacity(0.15) : const Color(0xFF161823),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: currentPersona == 'ragna' ? const Color(0xFF00E5FF) : Colors.transparent,
-                        width: 1.5,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAlignment.stretch,
+            children: [
+              // ১. টপ হেডার ও ক্যারেক্টার সুইচ বার
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAlignment.start,
+                    children: [
+                      const Text(
+                        "SIAM AI OS v1.0",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          letterSpacing: 2,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      boxShadow: currentPersona == 'ragna' 
-                          ? [BoxShadow(color: const Color(0xFF00E5FF).withOpacity(0.3), blurRadius: 10)]
-                          : [],
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.shield_outlined, color: Color(0xFF00E5FF), size: 18),
-                        SizedBox(width: 8),
-                        Text('RAGNA (Male)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // MAYA TAB
-                GestureDetector(
-                  onTap: () => switchPersona('maya'),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: currentPersona == 'maya' ? const Color(0xFFFF007F).withOpacity(0.15) : const Color(0xFF161823),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: currentPersona == 'maya' ? const Color(0xFFFF007F) : Colors.transparent,
-                        width: 1.5,
+                      Text(
+                        "ACTIVE: $activeName",
+                        style: TextStyle(
+                          color: activeThemeColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.extrabold,
+                          letterSpacing: 1.5,
+                        ),
                       ),
-                      boxShadow: currentPersona == 'maya' 
-                          ? [BoxShadow(color: const Color(0xFFFF007F).withOpacity(0.3), blurRadius: 10)]
-                          : [],
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.auto_awesome, color: Color(0xFFFF007F), size: 18),
-                        SizedBox(width: 8),
-                        Text('MAYA (Female)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          // ===== ২. চ্যাট বডি =====
-          Expanded(
-            child: _messages.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // গ্লোয়িং অবতার রিং
-                        Container(
-                          padding: const EdgeInsets.all(25),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFF121420),
-                            border: Border.all(color: primaryGlow, width: 2),
-                            boxShadow: [
-                              BoxShadow(color: primaryGlow.withOpacity(0.4), blurRadius: 30, spreadRadius: 2),
-                            ],
-                          ),
-                          child: Icon(
-                            currentPersona == 'ragna' ? Icons.psychology : Icons.face_3,
-                            size: 70,
-                            color: primaryGlow,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          currentPersona == 'ragna' ? '⚡ RAGNA ONLINE' : '🌸 MAYA ONLINE',
-                          style: TextStyle(
-                            color: primaryGlow,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          currentPersona == 'ragna' ? 'কী খবর সিয়াম দোস্ত? বল কী সাহায্য লাগবে!' : 'শুনছি সিয়াম, মিষ্টি কিছু বলবে নাকি?',
-                          style: TextStyle(color: Colors.grey.shade400, fontSize: 13),
-                        ),
-                      ],
+                  // ক্যারেক্টার সুইচ বাটন
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: activeThemeColor.withOpacity(0.2),
+                      side: BorderSide(color: activeThemeColor, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onPressed: _toggleAvatar,
+                    icon: Icon(Icons.swap_horiz, color: activeThemeColor),
+                    label: Text(
+                      isRagna ? "Switch to Maya" : "Switch to Ragna",
+                      style: TextStyle(color: activeThemeColor, fontWeight: FontWeight.bold),
                     ),
                   )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      final msg = _messages[index];
-                      final isUser = msg['sender'] == 'user';
-                      return Align(
-                        alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: isUser ? primaryGlow.withOpacity(0.15) : const Color(0xFF121420),
-                            borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(16),
-                              topRight: const Radius.circular(16),
-                              bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
-                              bottomRight: isUser ? Radius.zero : const Radius.circular(16),
+                ],
+              ),
+
+              const SizedBox(height: 30),
+
+              // ২. অ্যানিমে ডিসপ্লে বক্স উইথ নেওন গ্লো (Avatar Circle)
+              Expanded(
+                flex: 5,
+                child: Center(
+                  child: AnimatedBuilder(
+                    animation: _pulseController,
+                    builder: (context, child) {
+                      double glowRadius = 15 + (_pulseController.value * 20);
+                      return Container(
+                        width: 240,
+                        height: 240,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: activeThemeColor.withOpacity(0.6),
+                              blurRadius: glowRadius,
+                              spreadRadius: 2,
                             ),
-                            border: Border.all(
-                              color: isUser ? primaryGlow : Colors.white10,
-                            ),
+                          ],
+                          border: Border.all(
+                            color: activeThemeColor,
+                            width: 3,
                           ),
-                          child: Text(
-                            msg['text'] ?? '',
-                            style: const TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            activeAvatarPath,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // ছবি লোড না হলে সাইবার প্লেসহোল্ডার
+                              return Container(
+                                color: Colors.black54,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.person, size: 60, color: activeThemeColor),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      activeName,
+                                      style: TextStyle(color: activeThemeColor),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );
                     },
                   ),
-          ),
+                ),
+              ),
 
-          if (isLoading)
-            LinearProgressIndicator(color: primaryGlow, backgroundColor: Colors.transparent),
-
-          // ===== ৩. ফিউচারিস্টিক ইনপুট ফিল্ড =====
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Color(0xFF121420),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0A0B10),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: primaryGlow.withOpacity(0.3)),
-                    ),
-                    child: TextField(
-                      controller: _controller,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: currentPersona == 'ragna' ? 'রাগনাকে কমান্ড দে...' : 'মায়াকে কিছু বল...',
-                        hintStyle: TextStyle(color: Colors.grey.shade600),
-                        border: InputBorder.none,
+              // ৩. সাইবার ব্যাকএন্ড স্ট্রিম লগার (Terminal Log Window)
+              Container(
+                height: 110,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white12),
+                ),
+                child: ListView.builder(
+                  reverse: true,
+                  itemCount: _logs.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                      style: TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 11,
+                        color: index == 0 ? activeThemeColor : Colors.grey[400],
                       ),
+                      child: Text(_logs[index]),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // ৪. ডায়নামিক ভয়েস ট্রিগার বাটন
+              Center(
+                child: GestureDetector(
+                  onTap: _toggleListening,
+                  child: Container(
+                    width: 75,
+                    height: 75,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isListening ? activeThemeColor : Colors.black,
+                      border: Border.all(color: activeThemeColor, width: 2.5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: activeThemeColor.withOpacity(0.4),
+                          blurRadius: 10,
+                        )
+                      ],
+                    ),
+                    child: Icon(
+                      isListening ? Icons.mic : Icons.mic_none,
+                      size: 35,
+                      color: isListening ? Colors.black : activeThemeColor,
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                CircleAvatar(
-                  backgroundColor: primaryGlow,
-                  child: IconButton(
-                    icon: const Icon(Icons.send_rounded, color: Colors.black, size: 20),
-                    onPressed: sendMessage,
+              ),
+
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  isListening ? "LISTENING..." : "TAP MIC TO SPEAK",
+                  style: TextStyle(
+                    color: activeThemeColor.withOpacity(0.8),
+                    fontSize: 10,
+                    letterSpacing: 1.5,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
