@@ -120,19 +120,19 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       ),
       body: Stack(
         children: [
-          // Atmosphere Soft Glow (No circles)
+          // Atmosphere Soft Glow
           AnimatedBuilder(
             animation: _pulseController,
             builder: (context, child) {
               return Container(
                 decoration: BoxDecoration(
-                  radialGradient: RadialGradient(
+                  gradient: RadialGradient(
                     center: Alignment.topCenter,
                     radius: 1.2 + (_pulseController.value * 0.2),
                     colors: [
-                      const Color(0xFFBD00FF).withOpacity(0.25), // Neon Violet Soft Atmosphere
-                      const Color(0xFF00F0FF).withOpacity(0.10), // Electric Cyan Atmosphere
-                      const Color(0xFF07090E), // Deep Dark Background
+                      const Color(0xFFBD00FF).withOpacity(0.25),
+                      const Color(0xFF00F0FF).withOpacity(0.10),
+                      const Color(0xFF07090E),
                     ],
                     stops: const [0.0, 0.5, 1.0],
                   ),
