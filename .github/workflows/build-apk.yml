@@ -28,15 +28,35 @@ jobs:
       - name: Re-create Android files
         run: flutter create --org com.aurax --project-name aura_x .
 
+      - name: Install Pillow for Logo
+        run: pip3 install Pillow
+
       - name: Generate AURA-X App Logo
         run: |
           python3 -c "
+          import os
           from PIL import Image, ImageDraw
-          img = Image.new('RGB', (512, 512), color='#07090E')
-          draw = ImageDraw.Draw(img)
-          draw.ellipse([100, 100, 412, 412], outline='#BD00FF', width=20)
-          draw.ellipse([180, 180, 332, 332], fill='#00F0FF')
-          img.save('android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png')
+          
+          # Ensure directories exist
+          paths = [
+            'android/app/src/main/res/mipmap-mdpi',
+            'android/app/src/main/res/mipmap-hdpi',
+            'android/app/src/main/res/mipmap-xhdpi',
+            'android/app/src/main/res/mipmap-xxhdpi',
+            'android/app/src/main/res/mipmap-xxxhdpi'
+          ]
+          for p in paths:
+            os.makedirs(p, exist_ok=True)
+          
+          sizes = [(48, 'mipmap-mdpi'), (72, 'mipmap-hdpi'), (96, 'mipmap-xhdpi'), (144, 'mipmap-xxhdpi'), (192, 'mipmap-xxxhdpi')]
+          for size, folder in sizes:
+            img = Image.new('RGB', (size, size), color='#07090E')
+            draw = ImageDraw.Draw(img)
+            m = size // 10
+            draw.ellipse([m, m, size-m, size-m], outline='#BD00FF', width=max(2, size//20))
+            c = size // 4
+            draw.ellipse([c, c, size-c, size-c], fill='#00F0FF')
+            img.save(f'android/app/src/main/res/{folder}/ic_launcher.png')
           "
 
       - name: Get dependencies
