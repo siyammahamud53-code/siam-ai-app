@@ -106,193 +106,89 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      appBar: AppBar(
+        title: const Text('A U R A - X', style: TextStyle(letterSpacing: 2, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF160B12),
+        elevation: 0,
+      ),
+      body: Column(
         children: [
-          // Background Glow Effects
-          Positioned(
-            top: -100,
-            right: -80,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFFE60039).withOpacity(0.25),
-                blurRadius: 120,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -50,
-            left: -80,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFF8A00FF).withOpacity(0.2),
-                blurRadius: 100,
-              ),
-            ),
-          ),
-          
-          SafeArea(
-            child: Column(
+          // Status Header
+          Container(
+            padding: const EdgeInsets.all(12),
+            color: const Color(0xFF1F0E18),
+            child: Row(
               children: [
-                // Header Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.change_history, color: Colors.white, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        'A U R A - X',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 4,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(color: const Color(0xFFE60039).withOpacity(0.8), blurRadius: 12)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Status Card
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.04),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFE60039).withOpacity(0.4), width: 1.5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFE60039).withOpacity(0.1),
-                        blurRadius: 15,
-                        spreadRadius: 1,
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFE60039).withOpacity(0.2),
-                          border: Border.all(color: Colors.white, width: 1.5),
-                        ),
-                        child: const Icon(Icons.memory, color: Colors.white, size: 28),
-                      ),
-                      const SizedBox(width: 15),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'RENDER CORE: CONNECTED',
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _isLoading ? 'জেমিনি প্রসেস করছে...' : 'Aura Protocol: Crimson Triangle',
-                            style: const TextStyle(color: Color(0xFFFFA5A8), fontSize: 12),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-
-                // Messages Area
+                const Icon(Icons.memory, color: Color(0xFFE60039)),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      final msg = _messages[index];
-                      final isUser = msg['sender'] == 'user';
-                      return Align(
-                        alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 6),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.78),
-                          decoration: BoxDecoration(
-                            color: isUser 
-                                ? const Color(0xFFE60039).withOpacity(0.85)
-                                : Colors.white.withOpacity(0.06),
-                            borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(16),
-                              topRight: const Radius.circular(16),
-                              bottomLeft: isUser ? const Radius.circular(16) : const Radius.circular(4),
-                              bottomRight: isUser ? const Radius.circular(4) : const Radius.circular(16),
-                            ),
-                            border: Border.all(
-                              color: isUser ? Colors.transparent : Colors.white.withOpacity(0.15),
-                            ),
-                          ),
-                          child: Text(
-                            msg['text']!,
-                            style: const TextStyle(color: Colors.white, fontSize: 14.5, height: 1.3),
-                          ),
-                        ),
-                      );
-                    },
+                  child: Text(
+                    _isLoading ? 'AURA-X প্রসেস করছে...' : 'CORE: CONNECTED TO RENDER',
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ),
+              ],
+            ),
+          ),
 
-                // Input Bar
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: const Color(0xFFE60039).withOpacity(0.3)),
+          // Messages
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16),
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final msg = _messages[index];
+                final isUser = msg['sender'] == 'user';
+                return Align(
+                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.all(12),
+                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+                    decoration: BoxDecoration(
+                      color: isUser ? const Color(0xFFE60039) : const Color(0xFF1F1B24),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      msg['text']!,
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: TextField(
-                          controller: _controller,
-                          style: const TextStyle(color: Colors.white),
-                          onSubmitted: (_) => _sendMessage(),
-                          decoration: const InputDecoration(
-                            hintText: 'AURA-X কে কমান্ড দাও...',
-                            hintStyle: TextStyle(color: Colors.white38),
-                            border: InputBorder.none,
-                          ),
-                        ),
+                );
+              },
+            ),
+          ),
+
+          // Input Box
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    style: const TextStyle(color: Colors.white),
+                    onSubmitted: (_) => _sendMessage(),
+                    decoration: const InputDecoration(
+                      hintText: 'AURA-X কে কমান্ড দাও...',
+                      hintStyle: TextStyle(color: Colors.white38),
+                      filled: true,
+                      fillColor: Color(0xFF1F1B24),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        borderSide: BorderSide.none,
                       ),
-                      GestureDetector(
-                        onTap: _sendMessage,
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [Color(0xFFE60039), Color(0xFF8A00FF)],
-                            ),
-                          ),
-                          child: _isLoading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                                )
-                              : const Icon(Icons.send, color: Colors.white, size: 20),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: _isLoading 
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Icon(Icons.send, color: Color(0xFFE60039)),
+                  onPressed: _sendMessage,
                 ),
               ],
             ),
