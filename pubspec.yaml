@@ -1,22 +1,12 @@
-name: aura_x
-description: "AURA-X AI Companion with Black and Crimson Aura Theme"
-publish_to: 'none'
-version: 1.0.0+1
-
-environment:
-  sdk: '>=3.0.0 <4.0.0'
-
 dependencies:
   flutter:
     sdk: flutter
   http: ^1.2.0
-  google_fonts: ^6.1.0
-  cupertino_icons: ^1.0.6
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^3.0.0
+  web_socket_channel: ^3.0.0
+  flutter_overlay_window: ^0.4.5  # ফ্লোটিং অবতারের জন্য
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icons/ragna_avatar.png
+    - assets/icons/maya_avatar.png
