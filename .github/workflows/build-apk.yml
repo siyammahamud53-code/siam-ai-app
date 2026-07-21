@@ -37,5 +37,5 @@ jobs:
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: siam-ai-app-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Re-create Android files
+        run: flutter create --org com.aurax --project-name aura_x .
