@@ -92,7 +92,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         _messages.add({
           'sender': 'aura',
-          'text': 'নেটওয়ার্ক সমস্যা অথবা রেন্ডার সার্ভার স্লিপ মোডে আছে! ব্যাকএন্ড আবার টিপে দে বা একটু অপেক্ষা কর।'
+          'text': 'নেটওয়ার্ক সমস্যা অথবা রেন্ডার সার্ভার স্লিপ মোডে আছে! আবার ট্রাই কর দোস্ত।'
         });
       });
     } finally {
@@ -108,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Geometric Glow Effects (Matching 8070.jpg Vibe)
+          // Background Glow Effects (Crimson & Purple Accent)
           Positioned(
             top: -100,
             right: -80,
