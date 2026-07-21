@@ -14,6 +14,3 @@ dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/icons/ragna_avatar.png
-    - assets/icons/maya_avatar.png
