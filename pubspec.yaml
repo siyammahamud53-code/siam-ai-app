@@ -1,5 +1,5 @@
 name: aura_x
-description: "AURA-X AI Companion with Black and Gold Aura Theme"
+description: "AURA-X AI Companion with Black and Crimson Aura Theme"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.1.0
+  http: ^1.2.0
   google_fonts: ^6.1.0
   cupertino_icons: ^1.0.6
 
