@@ -17,7 +17,7 @@ class AuraXApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF070709), // Deep Obsidian Black
+        scaffoldBackgroundColor: const Color(0xFF07090E), // Ultra Dark Obsidian
       ),
       home: const HomeScreen(),
     );
@@ -33,32 +33,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _messageController = TextEditingController();
-  late AnimationController _auraController;
+  late AnimationController _pulseController;
   
   final List<Map<String, String>> _messages = [
     {
       'sender': 'ai',
-      'text': 'স্বাগতম সিয়াম দোস্ত! AURA-X গোল্ডেন কোর অ্যাক্টিভ। আজকের কী আদেশ?'
+      'text': 'AURA-X নিওন কোর অনলাইন। স্বাগতম সিয়াম দোস্ত! বলো কীভাবে সাহায্য করতে পারি?'
     }
   ];
   bool _isLoading = false;
 
-  // Render Server URL
   final String _apiUrl = "https://siam-ai-backend.onrender.com/chat";
 
   @override
   void initState() {
     super.initState();
-    // Continuous aura breathing animation
-    _auraController = AnimationController(
+    _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 3),
     )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
-    _auraController.dispose();
+    _pulseController.dispose();
     _messageController.dispose();
     super.dispose();
   }
@@ -109,143 +107,129 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       appBar: AppBar(
         title: Text(
           'A U R A - X',
-          style: GoogleFonts.cinzel(
+          style: GoogleFonts.orbitron(
             fontWeight: FontWeight.bold,
-            letterSpacing: 4.0,
-            color: const Color(0xFFFFD700), // Royal Gold
+            letterSpacing: 6.0,
+            color: const Color(0xFFBD00FF), // Cyber Neon Purple
             fontSize: 22,
           ),
         ),
-        backgroundColor: Colors.black.withAlpha(80),
+        backgroundColor: Colors.black.withOpacity(0.6),
         elevation: 0,
         centerTitle: true,
       ),
       body: Stack(
         children: [
-          // Glowing Gold & Amber Energy Aura Background
+          // Atmosphere Soft Glow (No circles)
           AnimatedBuilder(
-            animation: _auraController,
+            animation: _pulseController,
             builder: (context, child) {
-              return Stack(
-                children: [
-                  Positioned(
-                    top: -80 + (_auraController.value * 20),
-                    left: -80 + (_auraController.value * 20),
-                    child: Container(
-                      width: 320,
-                      height: 320,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFFFD700).withAlpha((50 + (_auraController.value * 35)).toInt()),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFFFFB700).withAlpha(100),
-                            blurRadius: 160,
-                            spreadRadius: 40,
-                          )
-                        ],
-                      ),
-                    ),
+              return Container(
+                decoration: BoxDecoration(
+                  radialGradient: RadialGradient(
+                    center: Alignment.topCenter,
+                    radius: 1.2 + (_pulseController.value * 0.2),
+                    colors: [
+                      const Color(0xFFBD00FF).withOpacity(0.25), // Neon Violet Soft Atmosphere
+                      const Color(0xFF00F0FF).withOpacity(0.10), // Electric Cyan Atmosphere
+                      const Color(0xFF07090E), // Deep Dark Background
+                    ],
+                    stops: const [0.0, 0.5, 1.0],
                   ),
-                  Positioned(
-                    bottom: 40 - (_auraController.value * 20),
-                    right: -80,
-                    child: Container(
-                      width: 330,
-                      height: 330,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFFF8C00).withAlpha((40 + (_auraController.value * 30)).toInt()),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFFFFA500).withAlpha(90),
-                            blurRadius: 170,
-                            spreadRadius: 50,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               );
             },
           ),
 
-          // Main Layout
+          // Main Screen Content
           SafeArea(
             child: Column(
               children: [
-                // Soul Core Display - Black & Gold
+                // Futuristic Glass Soul Core Box
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
                   child: Container(
-                    height: 120,
+                    height: 110,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          const Color(0xFFFFD700).withAlpha(30),
-                          Colors.black.withAlpha(180),
+                          const Color(0xFFBD00FF).withOpacity(0.2),
+                          const Color(0xFF00F0FF).withOpacity(0.05),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: const Color(0xFFFFD700).withAlpha(120),
-                        width: 1.2,
+                        color: const Color(0xFFBD00FF).withOpacity(0.6),
+                        width: 1.5,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFFD700).withAlpha(25),
-                          blurRadius: 20,
-                          spreadRadius: -2,
+                          color: const Color(0xFFBD00FF).withOpacity(0.2),
+                          blurRadius: 25,
+                          spreadRadius: 2,
                         )
                       ],
                     ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: const Color(0xFFFFD700).withAlpha(30),
-                              border: Border.all(color: const Color(0xFFFFD700)),
-                            ),
-                            child: const Icon(
-                              Icons.auto_awesome_rounded,
-                              size: 38,
-                              color: Color(0xFFFFD700),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'AURA-X SOUL CORE',
-                                style: GoogleFonts.orbitron(
-                                  color: const Color(0xFFFFD700),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedBuilder(
+                          animation: _pulseController,
+                          builder: (context, child) {
+                            return Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xFFBD00FF).withOpacity(0.2),
+                                border: Border.all(
+                                  color: const Color(0xFF00F0FF),
+                                  width: 1.5,
                                 ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFFBD00FF).withOpacity(0.6 * _pulseController.value),
+                                    blurRadius: 15,
+                                    spreadRadius: 3,
+                                  )
+                                ],
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Aura Level: Divine Gold | Ready',
-                                style: GoogleFonts.outfit(
-                                  color: Colors.white70,
-                                  fontSize: 12,
-                                ),
+                              child: const Icon(
+                                Icons.psychology_rounded,
+                                size: 36,
+                                color: Color(0xFF00F0FF),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 18),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'SYSTEM CORE: ONLINE',
+                              style: GoogleFonts.orbitron(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2.0,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Aura Protocol: Cyber Violet',
+                              style: GoogleFonts.outfit(
+                                color: const Color(0xFF00F0FF),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -268,18 +252,18 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           ),
                           decoration: BoxDecoration(
                             color: isUser
-                                ? const Color(0xFFFFD700).withAlpha(45)
-                                : Colors.black.withAlpha(160),
+                                ? const Color(0xFFBD00FF).withOpacity(0.3)
+                                : Colors.black.withOpacity(0.7),
                             borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(20),
-                              topRight: const Radius.circular(20),
-                              bottomLeft: Radius.circular(isUser ? 20 : 4),
-                              bottomRight: Radius.circular(isUser ? 4 : 20),
+                              topLeft: const Radius.circular(18),
+                              topRight: const Radius.circular(18),
+                              bottomLeft: Radius.circular(isUser ? 18 : 2),
+                              bottomRight: Radius.circular(isUser ? 2 : 18),
                             ),
                             border: Border.all(
                               color: isUser
-                                  ? const Color(0xFFFFD700)
-                                  : const Color(0xFFFFD700).withAlpha(40),
+                                  ? const Color(0xFFBD00FF)
+                                  : const Color(0xFF00F0FF).withOpacity(0.3),
                               width: 1,
                             ),
                           ),
@@ -301,10 +285,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: SizedBox(
-                      width: 24,
-                      height: 24,
+                      width: 22,
+                      height: 22,
                       child: CircularProgressIndicator(
-                        color: Color(0xFFFFD700),
+                        color: Color(0xFF00F0FF),
                         strokeWidth: 2,
                       ),
                     ),
@@ -318,17 +302,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(150),
+                            color: Colors.black.withOpacity(0.6),
                             borderRadius: BorderRadius.circular(30),
                             border: Border.all(
-                              color: const Color(0xFFFFD700).withAlpha(90),
+                              color: const Color(0xFFBD00FF).withOpacity(0.5),
                             ),
                           ),
                           child: TextField(
                             controller: _messageController,
                             style: GoogleFonts.outfit(color: Colors.white),
                             decoration: InputDecoration(
-                              hintText: 'AURA-X কে বার্তা পাঠাও...',
+                              hintText: 'AURA-X কে কমান্ড দাও...',
                               hintStyle: GoogleFonts.outfit(color: Colors.white38),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
@@ -344,18 +328,18 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: const LinearGradient(
-                            colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
+                            colors: [Color(0xFFBD00FF), Color(0xFF00F0FF)],
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFFFD700).withAlpha(100),
+                              color: const Color(0xFFBD00FF).withOpacity(0.6),
                               blurRadius: 12,
                               spreadRadius: 1,
                             )
                           ],
                         ),
                         child: IconButton(
-                          icon: const Icon(Icons.send_rounded, color: Colors.black),
+                          icon: const Icon(Icons.send_rounded, color: Colors.white),
                           onPressed: _sendMessage,
                         ),
                       ),
