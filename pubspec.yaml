@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.0
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -26,7 +26,7 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
 
-  # সব ধরনের ইমেজ ও অ্যাভাটার এসেটস
+  # এসেটস ফোল্ডার ও ক্যারেক্টার ইমেজের পাথ
   assets:
     - assets/icons/
     - assets/icons/ragna_avatar.png.jpg
