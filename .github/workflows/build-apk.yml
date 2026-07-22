@@ -1,41 +1,44 @@
-name: Build Flutter APK with Icons
+name: Build Flutter APK
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-android:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-      - name: Checkout code
+      - name: 📂 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter
+      - name: 🦋 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.22.4'
           channel: 'stable'
           cache: true
 
-      - name: Get dependencies
+      - name: 📦 Get dependencies
         run: flutter pub get
 
-      - name: Build APK
+      - name: 🧹 Clean previous build
+        run: flutter clean
+
+      - name: 🔨 Build APK (Release)
         run: flutter build apk --release
 
-      - name: Upload APKs
+      - name: 📤 Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: aura-x-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/*.apk
+          retention-days: 7
