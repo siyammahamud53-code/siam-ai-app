@@ -1,84 +1,45 @@
-name: Build Flutter APK
+name: Build Flutter APK with Icons
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+
     steps:
-      - name: Checkout code
+      - name: 📂 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter
+      - name: 🦋 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6'
+          flutter-version: '3.22.4'
           channel: 'stable'
 
-      - name: Re-create Android files
-        run: flutter create --org com.aurax --project-name aura_x .
-
-      - name: Install Pillow for Logo
-        run: pip3 install Pillow
-
-      - name: Generate AURA-X Triangle-X Logo
-        run: |
-          python3 -c "
-          import os
-          from PIL import Image, ImageDraw
-          
-          paths = [
-            'android/app/src/main/res/mipmap-mdpi',
-            'android/app/src/main/res/mipmap-hdpi',
-            'android/app/src/main/res/mipmap-xhdpi',
-            'android/app/src/main/res/mipmap-xxhdpi',
-            'android/app/src/main/res/mipmap-xxxhdpi'
-          ]
-          for p in paths:
-            os.makedirs(p, exist_ok=True)
-          
-          sizes = [(48, 'mipmap-mdpi'), (72, 'mipmap-hdpi'), (96, 'mipmap-xhdpi'), (144, 'mipmap-xxhdpi'), (192, 'mipmap-xxxhdpi')]
-          for size, folder in sizes:
-            img = Image.new('RGB', (size, size), color='#090407')
-            draw = ImageDraw.Draw(img)
-            
-            # Draw Geometric Cyber Triangles (X-Core)
-            p1 = (size // 2, size // 8)
-            p2 = (size // 8, size - size // 4)
-            p3 = (size - size // 8, size - size // 4)
-            draw.polygon([p1, p2, p3], outline='#FFFFFF', width=max(2, size//25))
-            
-            p4 = (size // 2, size - size // 8)
-            p5 = (size // 8, size // 4)
-            p6 = (size - size // 8, size // 4)
-            draw.polygon([p4, p5, p6], outline='#E60039', width=max(2, size//25))
-            
-            # Central Core Node
-            c = size // 2
-            r = size // 10
-            draw.ellipse([c-r, c-r, c+r, c+r], fill='#FF0055')
-            
-            img.save(f'android/app/src/main/res/{folder}/ic_launcher.png')
-          "
-
-      - name: Get dependencies
+      - name: 📦 Get dependencies
         run: flutter pub get
 
-      - name: Build APK
+      # ========== 🖼️ Launcher Icon Auto Generator ==========
+      - name: 🖼️ Generate Launcher Icons
+        run: flutter run flutter_launcher_icons:main
+
+      # ========== 🔨 Build APK Release ==========
+      - name: 🔨 Build APK
         run: flutter build apk --release
 
-      - name: Upload APK as Artifact
+      # ========== 📤 Upload APK Artifact ==========
+      - name: 📤 Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: aura-x-app-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: aura-x-apk
+          path: build/app/outputs/flutter-apk/*.apk
