@@ -17,13 +17,10 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
 
-# অ্যাপের বাইরের আইকন ফিক্সড (সাধারণ এবং রাউন্ড দুইটাই তৈরি হবে)
 flutter_launcher_icons:
-  android: true
+  android: "ic_launcher"
   ios: true
   image_path: "assets/icons/app_logo.png"
-  adaptive_icon_background: "#0A0A0E"
-  adaptive_icon_foreground: "assets/icons/app_logo.png"
 
 flutter:
   uses-material-design: true
