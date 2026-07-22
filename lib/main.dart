@@ -15,36 +15,36 @@ class SiamAiApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Siam AI',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A0A0E), // Ultra Dark Cyber Mode
+        scaffoldBackgroundColor: const Color(0xFF0A0A0E),
       ),
-      home: const YouTubeStyleLayout(),
+      home: const CyberCinematicLayout(),
     );
   }
 }
 
-class YouTubeStyleLayout extends StatefulWidget {
-  const YouTubeStyleLayout({super.key});
+class CyberCinematicLayout extends StatefulWidget {
+  const CyberCinematicLayout({super.key});
 
   @override
-  State<YouTubeStyleLayout> createState() => _YouTubeStyleLayoutState();
+  State<CyberCinematicLayout> createState() => _CyberCinematicLayoutState();
 }
 
-class _YouTubeStyleLayoutState extends State<YouTubeStyleLayout> {
+class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
   bool isRagna = true;
   bool isListening = false;
-  bool isVideoVisible = true;
+  bool isFullScreen = false; // ফুল স্ক্রিন টগল
+  bool isSpeaking = false;   // কথা বলার নড়াচড়া
 
   String get activeName => isRagna ? 'RAGNA AI' : 'MAYA AI';
-  Color get activeColor => isRagna ? const Color(0xFF00E5FF) : const Color(0xFFFF007F); // Neon Cyan & Pink
+  Color get activeColor => isRagna ? const Color(0xFF00E5FF) : const Color(0xFFFF007F);
 
-  // তোর গিটহাবের রিয়েল ফাইলের নাম অনুযায়ী অ্যাভাটার ইমেজ পাথ
   String get activeAvatar => isRagna 
       ? 'assets/icons/ragna_avatar.png.jpg' 
       : 'assets/icons/maya_avatar.png.jpg';
 
   final List<Map<String, String>> _messages = [
-    {"sender": "SYSTEM", "text": "Siam AI Voice Engine Loaded."},
-    {"sender": "RAGNA AI", "text": "কী খবর দোস্ত? প্রিমিয়াম নিয়ন ইন্টারফেস ও কাস্টম অ্যাভাটার একদম রেডি!"},
+    {"sender": "SYSTEM", "text": "Cinematic AI Engine & Camera Tracking Active."},
+    {"sender": "RAGNA AI", "text": "কী খবর সিয়াম দোস্ত? এখন আমি কথা বললে জুম হব এবং ক্যামেরা মুভ করবে!"},
   ];
 
   @override
@@ -66,18 +66,20 @@ class _YouTubeStyleLayoutState extends State<YouTubeStyleLayout> {
       isRagna = !isRagna;
       _messages.insert(0, {
         "sender": "SYSTEM",
-        "text": "Switched Avatar to $activeName"
+        "text": "Switched persona to $activeName"
       });
     });
   }
 
+  // ভয়েস অন করার সাথে সাথে অ্যানিমেশন শুরু হবে
   void _toggleListening() {
     setState(() {
       isListening = !isListening;
+      isSpeaking = isListening; // কথা বলার সময় জুম/নড়াচড়া ট্রিগার হবে
       if (isListening) {
         _messages.insert(0, {
           "sender": activeName,
-          "text": "শুনছি সিয়াম, বল তোর কী লাগবে..."
+          "text": "শুনছি সিয়াম, বল তোর কী করতে হবে..."
         });
       }
     });
@@ -86,192 +88,207 @@ class _YouTubeStyleLayoutState extends State<YouTubeStyleLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0E),
-        elevation: 0,
-        title: Row(
-          children: [
-            // স্টারের বদলে প্রিমিয়াম নিয়ন 'S' হেডার লোগো
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF00E5FF), Color(0xFFFF007F)],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF00E5FF).withOpacity(0.5),
-                    blurRadius: 8,
-                  )
+      appBar: isFullScreen
+          ? null // ফুল স্ক্রিন মোডে ওপরের বার হাইড হয়ে যাবে
+          : AppBar(
+              backgroundColor: const Color(0xFF0A0A0E),
+              elevation: 0,
+              title: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF00E5FF), Color(0xFFFF007F)],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF00E5FF).withOpacity(0.5),
+                          blurRadius: 8,
+                        )
+                      ],
+                    ),
+                    child: const Text(
+                      "S",
+                      style: TextStyle(
+                        fontWeight: FontWeight.black,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    "SIAM AI",
+                    style: TextStyle(
+                      fontWeight: FontWeight.extrabold,
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
-              child: const Text(
-                "S",
-                style: TextStyle(
-                  fontWeight: FontWeight.black,
-                  fontSize: 16,
-                  color: Colors.black,
+              actions: [
+                IconButton(
+                  icon: Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen, color: Colors.white70),
+                  onPressed: () {
+                    setState(() {
+                      isFullScreen = !isFullScreen;
+                    });
+                  },
                 ),
-              ),
+              ],
             ),
-            const SizedBox(width: 10),
-            ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Color(0xFF00E5FF), Color(0xFFFFFFFF)],
-              ).createShader(bounds),
-              child: const Text(
-                "SIAM AI",
-                style: TextStyle(
-                  fontWeight: FontWeight.extrabold,
-                  fontSize: 20,
-                  letterSpacing: 1.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(icon: const Icon(Icons.cast, color: Colors.white70), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.notifications_none, color: Colors.white70), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.search, color: Colors.white70), onPressed: () {}),
-        ],
-      ),
       body: SafeArea(
         child: Column(
           children: [
-            // ১. কাস্টম ভিডিও ও অ্যানিমে অ্যাভাটার ডিসপ্লে
-            if (isVideoVisible)
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    border: Border.all(color: activeColor.withOpacity(0.3), width: 1),
-                  ),
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // এখানে গিটহাবের আসল অ্যানিমে অ্যাভাটার ইমেজ লোড হবে
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: activeColor, width: 2),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: activeColor.withOpacity(0.4),
-                                    blurRadius: 15,
-                                  )
-                                ],
-                              ),
-                              child: CircleAvatar(
-                                radius: 45,
-                                backgroundColor: Colors.black,
-                                backgroundImage: AssetImage(activeAvatar),
-                                onBackgroundImageError: (_, __) {},
-                                child: Image.asset(
-                                  activeAvatar,
-                                  errorBuilder: (context, error, stackTrace) => Icon(
-                                    Icons.person,
-                                    size: 45,
-                                    color: activeColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              "$activeName LIVE",
-                              style: TextStyle(
-                                color: activeColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                                letterSpacing: 1.5,
-                              ),
-                            ),
-                          ],
+            // ১. সিনেমাটিক মুভিং ও ফুল স্ক্রিন ডিসপ্লে
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+              height: isFullScreen
+                  ? MediaQuery.of(context).size.height * 0.75 // ফুল স্ক্রিন সাইজ
+                  : MediaQuery.of(context).size.height * 0.32, // ইউটিউব স্ট্যান্ডার্ড সাইজ
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                border: Border.all(color: activeColor.withOpacity(0.4), width: 1.5),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // ক্যারেক্টার জুম ও মুভমেন্ট অ্যানিমেশন
+                  AnimatedScale(
+                    scale: isSpeaking ? 1.25 : 1.0, // কথা বললে কাছে আসবে (Zoom In)
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.elasticOut,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      padding: EdgeInsets.all(isSpeaking ? 8 : 2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: activeColor, width: isSpeaking ? 4 : 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: activeColor.withOpacity(isSpeaking ? 0.8 : 0.3),
+                            blurRadius: isSpeaking ? 25 : 10,
+                          )
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        radius: isFullScreen ? 75 : 45,
+                        backgroundColor: Colors.black,
+                        backgroundImage: AssetImage(activeAvatar),
+                        child: Image.asset(
+                          activeAvatar,
+                          errorBuilder: (context, error, stackTrace) => Icon(
+                            Icons.person,
+                            size: 50,
+                            color: activeColor,
+                          ),
                         ),
                       ),
-                      Positioned(
-                        top: 10,
-                        right: 10,
-                        child: GestureDetector(
+                    ),
+                  ),
+
+                  // ডিসপ্লের ওপর কন্ট্রোল বাটন (Full Screen & Cut Switch)
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Row(
+                      children: [
+                        GestureDetector(
                           onTap: () {
                             setState(() {
-                              isVideoVisible = false;
+                              isFullScreen = !isFullScreen;
                             });
                           },
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: const BoxDecoration(
-                              color: Colors.black54,
+                              color: Colors.black80,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 20),
+                            child: Icon(
+                              isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ),
 
-            // ২. টাইটেল ও চ্যানেল সুইচ সেকশন
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              color: const Color(0xFF0A0A0E),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.black,
-                    backgroundImage: AssetImage(activeAvatar),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        activeName,
-                        style: const TextStyle(
+                  // লাইভ স্টেটাস টেক্সট
+                  Positioned(
+                    bottom: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black80,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: activeColor.withOpacity(0.5)),
+                      ),
+                      child: Text(
+                        isSpeaking ? "• $activeName SPEAKING..." : "• $activeName IDLE",
+                        style: TextStyle(
+                          color: activeColor,
+                          fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: Colors.white,
                         ),
                       ),
-                      const Text(
-                        "AI Persona Mode",
-                        style: TextStyle(fontSize: 11, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: _togglePersona,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: activeColor,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    ),
-                    child: const Text(
-                      "Switch Avatar",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
                     ),
                   ),
                 ],
               ),
             ),
 
-            const Divider(color: Colors.white12, height: 1),
+            // ২. টাইটেল ও সাবস্ক্রাইব/সুইচ সেকশন (ফুল স্ক্রিন মোডে হাইড থাকবে)
+            if (!isFullScreen)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                color: const Color(0xFF0A0A0E),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.black,
+                      backgroundImage: AssetImage(activeAvatar),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      activeName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: _togglePersona,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: activeColor,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      ),
+                      child: const Text(
+                        "Switch Persona",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-            // ৩. ইউটিউব লাইভ চ্যাট
+            if (!isFullScreen) const Divider(color: Colors.white12, height: 1),
+
+            // ৩. লাইভ চ্যাট হিস্ট্রি
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.all(12),
@@ -343,7 +360,7 @@ class _YouTubeStyleLayoutState extends State<YouTubeStyleLayout> {
                         border: Border.all(color: Colors.white10),
                       ),
                       child: Text(
-                        isListening ? "Listening your command..." : "Ask Siam AI...",
+                        isListening ? "Listening to Siam..." : "Ask Siam AI...",
                         style: const TextStyle(color: Colors.white70, fontSize: 13),
                       ),
                     ),
