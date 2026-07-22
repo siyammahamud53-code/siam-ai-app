@@ -97,7 +97,7 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAlignment.start,
                     children: [
                       const Text(
                         "SIAM AI OS v1.0",
@@ -113,7 +113,7 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                         style: TextStyle(
                           color: activeThemeColor,
                           fontSize: 20,
-                          fontWeight: FontWeight.extrabold,
+                          fontWeight: FontWeight.bold,
                           letterSpacing: 1.5,
                         ),
                       ),
