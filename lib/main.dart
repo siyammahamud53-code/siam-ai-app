@@ -111,7 +111,7 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
                     child: const Text(
                       "S",
                       style: TextStyle(
-                        fontWeight: FontWeight.black,
+                        fontWeight: FontWeight.w900,
                         fontSize: 16,
                         color: Colors.black,
                       ),
@@ -121,7 +121,7 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
                   const Text(
                     "SIAM AI",
                     style: TextStyle(
-                      fontWeight: FontWeight.extrabold,
+                      fontWeight: FontWeight.w800,
                       fontSize: 20,
                       color: Colors.white,
                     ),
