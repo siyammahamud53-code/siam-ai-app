@@ -32,8 +32,8 @@ class CyberCinematicLayout extends StatefulWidget {
 class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
   bool isRagna = true;
   bool isListening = false;
-  bool isFullScreen = false; // ফুল স্ক্রিন টগল
-  bool isSpeaking = false;   // কথা বলার নড়াচড়া
+  bool isFullScreen = false;
+  bool isSpeaking = false;
 
   String get activeName => isRagna ? 'RAGNA AI' : 'MAYA AI';
   Color get activeColor => isRagna ? const Color(0xFF00E5FF) : const Color(0xFFFF007F);
@@ -71,11 +71,10 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
     });
   }
 
-  // ভয়েস অন করার সাথে সাথে অ্যানিমেশন শুরু হবে
   void _toggleListening() {
     setState(() {
       isListening = !isListening;
-      isSpeaking = isListening; // কথা বলার সময় জুম/নড়াচড়া ট্রিগার হবে
+      isSpeaking = isListening;
       if (isListening) {
         _messages.insert(0, {
           "sender": activeName,
@@ -89,7 +88,7 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: isFullScreen
-          ? null // ফুল স্ক্রিন মোডে ওপরের বার হাইড হয়ে যাবে
+          ? null
           : AppBar(
               backgroundColor: const Color(0xFF0A0A0E),
               elevation: 0,
@@ -148,8 +147,8 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOut,
               height: isFullScreen
-                  ? MediaQuery.of(context).size.height * 0.75 // ফুল স্ক্রিন সাইজ
-                  : MediaQuery.of(context).size.height * 0.32, // ইউটিউব স্ট্যান্ডার্ড সাইজ
+                  ? MediaQuery.of(context).size.height * 0.75
+                  : MediaQuery.of(context).size.height * 0.32,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.black,
@@ -160,7 +159,7 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
                 children: [
                   // ক্যারেক্টার জুম ও মুভমেন্ট অ্যানিমেশন
                   AnimatedScale(
-                    scale: isSpeaking ? 1.25 : 1.0, // কথা বললে কাছে আসবে (Zoom In)
+                    scale: isSpeaking ? 1.25 : 1.0,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.elasticOut,
                     child: AnimatedContainer(
@@ -192,32 +191,28 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
                     ),
                   ),
 
-                  // ডিসপ্লের ওপর কন্ট্রোল বাটন (Full Screen & Cut Switch)
+                  // ফুল স্ক্রিন টগল বাটন
                   Positioned(
                     top: 10,
                     right: 10,
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isFullScreen = !isFullScreen;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: const BoxDecoration(
-                              color: Colors.black80,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isFullScreen = !isFullScreen;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.8),
+                          shape: BoxShape.circle,
                         ),
-                      ],
+                        child: Icon(
+                          isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
                     ),
                   ),
 
@@ -227,7 +222,7 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.black80,
+                        color: Colors.black.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: activeColor.withOpacity(0.5)),
                       ),
@@ -245,7 +240,7 @@ class _CyberCinematicLayoutState extends State<CyberCinematicLayout> {
               ),
             ),
 
-            // ২. টাইটেল ও সাবস্ক্রাইব/সুইচ সেকশন (ফুল স্ক্রিন মোডে হাইড থাকবে)
+            // ২. টাইটেল ও সাবস্ক্রাইব/সুইচ সেকশন
             if (!isFullScreen)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
