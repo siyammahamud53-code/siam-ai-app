@@ -17,16 +17,17 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
 
-# অ্যাপসের বাইরের অফিশিয়াল প্রিমিয়াম লোগো
+# অ্যাপের বাইরের আইকন ফিক্সড (সাধারণ এবং রাউন্ড দুইটাই তৈরি হবে)
 flutter_launcher_icons:
-  android: "ic_launcher"
+  android: true
   ios: true
   image_path: "assets/icons/app_logo.png"
+  adaptive_icon_background: "#0A0A0E"
+  adaptive_icon_foreground: "assets/icons/app_logo.png"
 
 flutter:
   uses-material-design: true
 
-  # এসেটস ফোল্ডার ও ক্যারেক্টার ইমেজের পাথ
   assets:
     - assets/icons/
     - assets/icons/ragna_avatar.png.jpg
