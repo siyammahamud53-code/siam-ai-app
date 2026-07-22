@@ -15,55 +15,38 @@ class SiamAiApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF0D0F12),
       ),
-      home: const CyberDashboardPage(),
+      home: const MainCyberLayout(),
     );
   }
 }
 
-class CyberDashboardPage extends StatefulWidget {
-  const CyberDashboardPage({super.key});
+class MainCyberLayout extends StatefulWidget {
+  const MainCyberLayout({super.key});
 
   @override
-  State<CyberDashboardPage> createState() => _CyberDashboardPageState();
+  State<MainCyberLayout> createState() => _MainCyberLayoutState();
 }
 
-class _CyberDashboardPageState extends State<CyberDashboardPage>
-    with SingleTickerProviderStateMixin {
+class _MainCyberLayoutState extends State<MainCyberLayout> {
   bool isRagna = true;
   bool isListening = false;
-  late AnimationController _pulseController;
 
   String get activeName => isRagna ? 'RAGNA' : 'MAYA';
-  String get activeAvatarPath =>
-      isRagna ? 'assets/icons/ragna_avatar.png' : 'assets/icons/maya_avatar.png';
   Color get activeThemeColor =>
       isRagna ? const Color(0xFF00E5FF) : const Color(0xFFFF2A85);
 
-  final List<String> _logs = [
-    "[SYSTEM]: Initializing Siam AI Core...",
-    "[NETWORK]: Render Backend Sync: OK",
-    "[AUDIO]: High-Fidelity Waveform Ready.",
+  final List<Map<String, String>> _messages = [
+    {"sender": "SYSTEM", "text": "[SYSTEM]: Siam AI Background Core Active."},
+    {"sender": "RAGNA", "text": "কী খবর সিয়াম দোস্ত? আমি ব্যাকগ্রাউন্ডে প্রস্তুত আছি!"},
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _pulseController.dispose();
-    super.dispose();
-  }
 
   void _toggleAvatar() {
     setState(() {
       isRagna = !isRagna;
-      _logs.insert(0, "[USER]: Switched Partner Persona to $activeName");
+      _messages.insert(0, {
+        "sender": "SYSTEM",
+        "text": "[SYSTEM]: Switched to $activeName Mode"
+      });
     });
   }
 
@@ -71,9 +54,10 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
     setState(() {
       isListening = !isListening;
       if (isListening) {
-        _logs.insert(0, "[$activeName]: Listening to Siam...");
-      } else {
-        _logs.insert(0, "[SYSTEM]: Audio Processing Complete.");
+        _messages.insert(0, {
+          "sender": activeName,
+          "text": "শুনছি দোস্ত, বল কী সাহায্য করতে হবে..."
+        });
       }
     });
   }
@@ -81,173 +65,162 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF161920),
+        title: Text(
+          "SIAM AI - $activeName",
+          style: TextStyle(color: activeThemeColor, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.swap_horiz, color: activeThemeColor),
+            onPressed: _toggleAvatar,
+            tooltip: "Switch Persona",
+          ),
+        ],
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "SIAM AI OS v1.0",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          letterSpacing: 2,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "ACTIVE: $activeName",
-                        style: TextStyle(
-                          color: activeThemeColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: activeThemeColor.withOpacity(0.2),
-                      side: BorderSide(color: activeThemeColor, width: 1.5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onPressed: _toggleAvatar,
-                    icon: Icon(Icons.swap_horiz, color: activeThemeColor),
-                    label: Text(
-                      isRagna ? "Switch to Maya" : "Switch to Ragna",
-                      style: TextStyle(color: activeThemeColor, fontWeight: FontWeight.bold),
-                    ),
+        child: Column(
+          children: [
+            // ১. ওপরে লাইভ ভিডিও / ক্যারেক্টার ডিসপ্লে (Top 35% Screen)
+            Container(
+              height: MediaQuery.of(context).size.height * 0.30,
+              width: double.infinity,
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: activeThemeColor, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: activeThemeColor.withOpacity(0.3),
+                    blurRadius: 10,
                   )
                 ],
               ),
-              const SizedBox(height: 30),
-              Expanded(
-                flex: 5,
-                child: Center(
-                  child: AnimatedBuilder(
-                    animation: _pulseController,
-                    builder: (context, child) {
-                      double glowRadius = 15 + (_pulseController.value * 20);
-                      return Container(
-                        width: 240,
-                        height: 240,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: activeThemeColor.withOpacity(0.6),
-                              blurRadius: glowRadius,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                          border: Border.all(
+              child: Stack(
+                children: [
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.live_tv, size: 50, color: activeThemeColor),
+                        const SizedBox(height: 8),
+                        Text(
+                          "$activeName LIVE DISPLAY",
+                          style: TextStyle(
                             color: activeThemeColor,
-                            width: 3,
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child: ClipOval(
-                          child: Image.asset(
-                            activeAvatarPath,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.black54,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.person, size: 60, color: activeThemeColor),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      activeName,
-                                      style: TextStyle(color: activeThemeColor),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white, size: 18),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("ভিডিও মিনিমাইজ করা হয়েছে। ব্যাকগ্রাউন্ডে এআই এক্টিভ আছে!"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                height: 110,
-                padding: const EdgeInsets.all(12),
+            ),
+
+            // ২. নিচে চ্যাট হিস্ট্রি ডিসপ্লে (Bottom Full Chat)
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.7),
-                  borderRadius: BorderRadius.circular(12),
+                  color: const Color(0xFF12141A),
+                  borderRadius: BorderRadius.circular(15),
                   border: Border.all(color: Colors.white12),
                 ),
                 child: ListView.builder(
                   reverse: true,
-                  itemCount: _logs.length,
+                  itemCount: _messages.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                      child: Text(
-                        _logs[index],
-                        style: TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 11,
-                          color: index == 0 ? activeThemeColor : Colors.grey[400],
+                    final msg = _messages[index];
+                    bool isUser = msg["sender"] == "USER";
+                    return Align(
+                      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: isUser
+                              ? activeThemeColor.withOpacity(0.2)
+                              : Colors.white10,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: isUser ? activeThemeColor : Colors.transparent,
+                          ),
+                        ),
+                        child: Text(
+                          "${msg['sender']}: ${msg['text']}",
+                          style: TextStyle(
+                            color: isUser ? activeThemeColor : Colors.white70,
+                            fontSize: 13,
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
               ),
-              const SizedBox(height: 20),
-              Center(
-                child: GestureDetector(
-                  onTap: _toggleListening,
-                  child: Container(
-                    width: 75,
-                    height: 75,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: isListening ? activeThemeColor : Colors.black,
-                      border: Border.all(color: activeThemeColor, width: 2.5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: activeThemeColor.withOpacity(0.4),
-                          blurRadius: 10,
-                        )
-                      ],
-                    ),
-                    child: Icon(
-                      isListening ? Icons.mic : Icons.mic_none,
-                      size: 35,
-                      color: isListening ? Colors.black : activeThemeColor,
+            ),
+
+            // ৩. নিচে ভয়েস কন্ট্রোল
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(color: Colors.white12),
+                      ),
+                      child: Text(
+                        isListening ? "Listening to Siam..." : "Tap mic to command...",
+                        style: const TextStyle(color: Colors.grey, fontSize: 13),
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: _toggleListening,
+                    child: CircleAvatar(
+                      radius: 24,
+                      backgroundColor: activeThemeColor,
+                      child: Icon(
+                        isListening ? Icons.mic : Icons.mic_none,
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              const SizedBox(height: 10),
-              Center(
-                child: Text(
-                  isListening ? "LISTENING..." : "TAP MIC TO SPEAK",
-                  style: TextStyle(
-                    color: activeThemeColor.withOpacity(0.8),
-                    fontSize: 10,
-                    letterSpacing: 1.5,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
