@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -91,14 +90,14 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: Column(
-            crossAxisAlignment: CrossAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // ১. টপ হেডার ও ক্যারেক্টার সুইচ বার
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         "SIAM AI OS v1.0",
@@ -210,12 +209,14 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2.0),
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 11,
-                        color: index == 0 ? activeThemeColor : Colors.grey[400],
+                      child: Text(
+                        _logs[index],
+                        style: TextStyle(
+                          fontFamily: 'monospace',
+                          fontSize: 11,
+                          color: index == 0 ? activeThemeColor : Colors.grey[400],
+                        ),
                       ),
-                      child: Text(_logs[index]),
                     );
                   },
                 ),
