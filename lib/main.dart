@@ -158,25 +158,27 @@ class _MainCyberLayoutState extends State<MainCyberLayout> {
                   itemBuilder: (context, index) {
                     final msg = _messages[index];
                     bool isUser = msg["sender"] == "USER";
-                    return Align(
-                      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                    return Container(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: isUser
-                              ? activeThemeColor.withOpacity(0.2)
-                              : Colors.white10,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: isUser ? activeThemeColor : Colors.transparent,
+                      child: Align(
+                        alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: isUser
+                                ? activeThemeColor.withOpacity(0.2)
+                                : Colors.white10,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: isUser ? activeThemeColor : Colors.transparent,
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          "${msg['sender']}: ${msg['text']}",
-                          style: TextStyle(
-                            color: isUser ? activeThemeColor : Colors.white70,
-                            fontSize: 13,
+                          child: Text(
+                            "${msg['sender']}: ${msg['text']}",
+                            style: TextStyle(
+                              color: isUser ? activeThemeColor : Colors.white70,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
                       ),
