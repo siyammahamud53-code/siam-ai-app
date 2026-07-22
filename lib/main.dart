@@ -13,7 +13,7 @@ class SiamAiApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Siam AI Voice Assistant',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0D0F12), // Cyberpunk Dark
+        scaffoldBackgroundColor: const Color(0xFF0D0F12),
       ),
       home: const CyberDashboardPage(),
     );
@@ -29,21 +29,16 @@ class CyberDashboardPage extends StatefulWidget {
 
 class _CyberDashboardPageState extends State<CyberDashboardPage>
     with SingleTickerProviderStateMixin {
-  // ক্যারেক্টার স্টেট (Ragna / Maya)
   bool isRagna = true;
   bool isListening = false;
-  
-  // অ্যানিমেশন কন্ট্রোলার (Glowing Avatar Pulse)
   late AnimationController _pulseController;
-  
-  // ক্যারেক্টার তথ্য
+
   String get activeName => isRagna ? 'RAGNA' : 'MAYA';
   String get activeAvatarPath =>
       isRagna ? 'assets/icons/ragna_avatar.png' : 'assets/icons/maya_avatar.png';
   Color get activeThemeColor =>
-      isRagna ? const Color(0xFF00E5FF) : const Color(0xFFFF2A85); // Neon Cyan / Neon Pink
+      isRagna ? const Color(0xFF00E5FF) : const Color(0xFFFF2A85);
 
-  // সাইবার লগ স্ট্রিম
   final List<String> _logs = [
     "[SYSTEM]: Initializing Siam AI Core...",
     "[NETWORK]: Render Backend Sync: OK",
@@ -92,12 +87,11 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ১. টপ হেডার ও ক্যারেক্টার সুইচ বার
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         "SIAM AI OS v1.0",
@@ -119,7 +113,6 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                       ),
                     ],
                   ),
-                  // ক্যারেক্টার সুইচ বাটন
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: activeThemeColor.withOpacity(0.2),
@@ -137,10 +130,7 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                   )
                 ],
               ),
-
               const SizedBox(height: 30),
-
-              // ২. অ্যানিমে ডিসপ্লে বক্স উইথ নেওন গ্লো (Avatar Circle)
               Expanded(
                 flex: 5,
                 child: Center(
@@ -170,7 +160,6 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                             activeAvatarPath,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
-                              // ছবি লোড না হলে সাইবার প্লেসহোল্ডার
                               return Container(
                                 color: Colors.black54,
                                 child: Column(
@@ -193,8 +182,6 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                   ),
                 ),
               ),
-
-              // ৩. সাইবার ব্যাকএন্ড স্ট্রিম লগার (Terminal Log Window)
               Container(
                 height: 110,
                 padding: const EdgeInsets.all(12),
@@ -221,10 +208,7 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                   },
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // ৪. ডায়নামিক ভয়েস ট্রিগার বাটন
               Center(
                 child: GestureDetector(
                   onTap: _toggleListening,
@@ -250,7 +234,6 @@ class _CyberDashboardPageState extends State<CyberDashboardPage>
                   ),
                 ),
               ),
-
               const SizedBox(height: 10),
               Center(
                 child: Text(
