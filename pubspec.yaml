@@ -17,6 +17,7 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
 
+# অ্যাপসের বাইরের অফিশিয়াল প্রিমিয়াম লোগো
 flutter_launcher_icons:
   android: "ic_launcher"
   ios: true
@@ -25,7 +26,8 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
 
-  # অ্যানিমে ক্যারেক্টার ও আইকনের ফোল্ডার এখানে পারফেক্টলি যুক্ত করা হলো
+  # সব ধরনের ইমেজ ও অ্যাভাটার এসেটস
   assets:
     - assets/icons/
-    - assets/images/
+    - assets/icons/ragna_avatar.png.jpg
+    - assets/icons/maya_avatar.png.jpg
