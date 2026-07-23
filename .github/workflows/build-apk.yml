@@ -21,9 +21,9 @@ jobs:
           java-version: '17'
 
       - name: 🦋 Setup Flutter
-        uses: subosito/flutter-action@v2.6.2
+        uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: '3.19.6'
 
       - name: 📦 Get dependencies
         run: flutter pub get
