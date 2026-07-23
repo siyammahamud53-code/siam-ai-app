@@ -11,6 +11,10 @@ dependencies:
     sdk: flutter
   permission_handler: ^11.3.1
   http: ^1.2.0
+  # এই ৩টা প্যাকেজ যোগ করা হয়েছে যা লগে মিসিং ছিল:
+  speech_to_text: ^6.6.0
+  flutter_tts: ^3.8.5
+  google_generative_ai: ^0.2.2
 
 dev_dependencies:
   flutter_test:
