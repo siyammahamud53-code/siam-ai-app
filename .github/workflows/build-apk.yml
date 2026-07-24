@@ -2,41 +2,41 @@ name: Build Flutter APK
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
 
     steps:
-      - name: 📂 Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: ☕ Setup Java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: 🦋 Setup Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6'
+          flutter-version: '3.22.4'
+          channel: 'stable'
 
-      - name: 📦 Get dependencies
+      - name: Install Dependencies
         run: flutter pub get
 
-      - name: 🧹 Clean previous build
-        run: flutter clean
+      - name: Generate App Icons
+        run: flutter pub run flutter_launcher_icons
 
-      - name: 🔨 Build APK (Release)
+      - name: Build APK (Release)
         run: flutter build apk --release
 
-      - name: 📤 Upload APKs
+      - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: aura-x-apk
-          path: build/app/outputs/flutter-apk/*.apk
-          retention-days: 7
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
